@@ -47,7 +47,8 @@ func main() {
 	router := gin.Default()
 
 	// Define your API routes and handlers here
-	router.POST("/customer", createCustomer)
+	router.POST("/customers", createCustomer)
+	router.PUT("/customers/:id", updateCustomer)
 
 	// Run the server
 	port := 8080
@@ -57,7 +58,7 @@ func main() {
 	}
 }
 
-// Add your API handlers here
+// Create Customers
 func createCustomer(c *gin.Context) {
 	var customer Customers
 	if err := c.ShouldBindJSON(&customer); err != nil {
@@ -85,4 +86,35 @@ func createCustomer(c *gin.Context) {
 	}
 
 	c.JSON(201, gin.H{"message": "Customer created successfully", "data": customer})
+}
+
+// Update Customers
+// Update existing customer by ID
+func updateCustomer(c *gin.Context) {
+	var customer Customers
+	customerID := c.Param("Id")
+
+	// Bind JSON input to customer struct
+	if err := c.ShouldBindJSON(&customer); err != nil {
+		c.JSON(400, gin.H{"error": err.Error()})
+		return
+	}
+
+	// Prepare the SQL query
+	query := "UPDATE customers SET name=$1, phonenumber=$2, address=$3 WHERE id=$4"
+	stmt, err := db.Prepare(query)
+	if err != nil {
+		c.JSON(500, gin.H{"error": "Failed to prepare the database query"})
+		return
+	}
+	defer stmt.Close()
+
+	// Execute the SQL query
+	_, err = stmt.Exec(customer.Name, customer.PhoneNumber, customer.Address, customerID)
+	if err != nil {
+		c.JSON(500, gin.H{"error": "Failed to update customer in the database"})
+		return
+	}
+
+	c.JSON(201, gin.H{"message": "Customer updated successfully"})
 }
