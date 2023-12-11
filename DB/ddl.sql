@@ -1,25 +1,43 @@
--- Tabel Master: Customer
-CREATE TABLE Customer (
-    CustID SERIAL PRIMARY KEY,
-    NamaCust VARCHAR(255) NOT NULL,
-    NoHp VARCHAR(15) NOT NULL
+
+-- Tabel Pelanggan
+CREATE TABLE IF NOT EXISTS pelanggan (
+id SERIAL PRIMARY KEY,
+nama VARCHAR(255) NOT NULL,
+nomorTelepon VARCHAR(20) NOT NULL,
+alamat TEXT NOT NULL
 );
 
--- Tabel Master: Service
-CREATE TABLE Service (
-    ServiceID SERIAL PRIMARY KEY,
-    Pelayanan VARCHAR(50) NOT NULL,
-    Satuan VARCHAR(10) NOT NULL,
-    Harga INT NOT NULL
+-- Tabel Produk
+CREATE TABLE IF NOT EXISTS produk (
+id SERIAL PRIMARY KEY,
+nama VARCHAR(255) NOT NULL,
+harga INT NOT NULL,
+satuan VARCHAR(20) NOT NULL
 );
 
--- Tabel Transaksi: LaundryTransaction
-CREATE TABLE LaundryTransaction (
-    TransaksiID SERIAL PRIMARY KEY,
-    NoNota INT NOT NULL,
-    TanggalMasuk DATE NOT NULL,
-    TanggalSelesai DATE NOT NULL,
-    DiterimaOleh VARCHAR(50) NOT NULL,
-    CustID INT REFERENCES Customer(CustID),
-    CONSTRAINT unique_no_nota UNIQUE (NoNota)
+-- Tabel Karyawan
+CREATE TABLE IF NOT EXISTS karyawan (
+id SERIAL PRIMARY KEY,
+nama VARCHAR(255) NOT NULL,
+nomorTelepon VARCHAR(20) NOT NULL,
+alamat TEXT NOT NULL
+);
+
+-- Tabel Transaksi
+CREATE TABLE IF NOT EXISTS transaksi (
+id SERIAL PRIMARY KEY,
+tanggalTagihan DATE NOT NULL,
+tanggalMasuk DATE NOT NULL,
+tanggalSelesai DATE NOT NULL,
+idKaryawan INT REFERENCES karyawan(id) NOT NULL,
+idPelanggan INT REFERENCES pelanggan(id) NOT NULL
+);
+
+-- Tabel DetailTransaksi
+CREATE TABLE IF NOT EXISTS detailTransaksi (
+id SERIAL PRIMARY KEY,
+idTagihan INT REFERENCES transaksi(id) NOT NULL,
+idProduk INT REFERENCES produk(id) NOT NULL,
+jumlah INT NOT NULL CHECK (jumlah > 0),
+harga INT NOT NULL
 );

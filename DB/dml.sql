@@ -1,14 +1,14 @@
--- Insert Sample Data for Customers
-INSERT INTO Customer (NamaCust, NoHp) VALUES
-('Jessica', '0812654987');
+-- Data Contoh untuk Pelanggan
+INSERT INTO pelanggan (nama, nomorTelepon, alamat) VALUES
+('John Doe', '1234567890', '123 Jalan Utama'),
+('Jane Smith', '9876543210', '456 Jalan Oak');
 
--- Insert Sample Data for Services
-INSERT INTO Service (Pelayanan, Satuan, Harga) VALUES
-('Cuci + Setrika', 'KG', 7000),
-('Laundry Bedcover', 'Buah', 50000),
-('Laundry Boneka', 'Buah', 25000);
+-- Data Contoh untuk Produk
+INSERT INTO produk (nama, harga, satuan) VALUES
+('Kaos', 16, 'Buah'),
+('Celana Jeans', 30, 'Buah');
 
--- Insert Sample Data for Transactions
-INSERT INTO LaundryTransaction (NoNota, TanggalMasuk, TanggalSelesai, DiterimaOleh, CustID) VALUES
-(1234, '2022-08-18', '2022-08-20', 'Mirna', 1);
-
+-- Data Contoh untuk Karyawan
+INSERT INTO karyawan (nama, nomorTelepon, alamat) VALUES
+('Alice Johnson', '1112223333', '789 Jalan Elm'),
+('Bob Davis', '4445556666', '101 Jalan Pine');
