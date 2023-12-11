@@ -1,43 +1,36 @@
-
--- Tabel Pelanggan
-CREATE TABLE IF NOT EXISTS pelanggan (
-id SERIAL PRIMARY KEY,
-nama VARCHAR(255) NOT NULL,
-nomorTelepon VARCHAR(20) NOT NULL,
-alamat TEXT NOT NULL
-);
-
 -- Tabel Produk
-CREATE TABLE IF NOT EXISTS produk (
-id SERIAL PRIMARY KEY,
-nama VARCHAR(255) NOT NULL,
-harga INT NOT NULL,
-satuan VARCHAR(20) NOT NULL
+CREATE TABLE IF NOT EXISTS products (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    price INT NOT NULL,
+    unit VARCHAR(20) NOT NULL
 );
 
 -- Tabel Karyawan
-CREATE TABLE IF NOT EXISTS karyawan (
-id SERIAL PRIMARY KEY,
-nama VARCHAR(255) NOT NULL,
-nomorTelepon VARCHAR(20) NOT NULL,
-alamat TEXT NOT NULL
+CREATE TABLE IF NOT EXISTS employees (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    phoneNumber VARCHAR(20) NOT NULL,
+    address TEXT NOT NULL
 );
 
 -- Tabel Transaksi
-CREATE TABLE IF NOT EXISTS transaksi (
-id SERIAL PRIMARY KEY,
-tanggalTagihan DATE NOT NULL,
-tanggalMasuk DATE NOT NULL,
-tanggalSelesai DATE NOT NULL,
-idKaryawan INT REFERENCES karyawan(id) NOT NULL,
-idPelanggan INT REFERENCES pelanggan(id) NOT NULL
+CREATE TABLE IF NOT EXISTS transactions (
+    id SERIAL PRIMARY KEY,
+    billDate DATE NOT NULL,
+    entryDate DATE NOT NULL,
+    finishDate DATE NOT NULL,
+    employeeID INT REFERENCES employees(id) NOT NULL,
+    customerID INT REFERENCES customers(id) NOT NULL,
+    totalBill DECIMAL(10, 2) NOT NULL
 );
 
 -- Tabel DetailTransaksi
-CREATE TABLE IF NOT EXISTS detailTransaksi (
-id SERIAL PRIMARY KEY,
-idTagihan INT REFERENCES transaksi(id) NOT NULL,
-idProduk INT REFERENCES produk(id) NOT NULL,
-jumlah INT NOT NULL CHECK (jumlah > 0),
-harga INT NOT NULL
+CREATE TABLE IF NOT EXISTS transactionDetails (
+    id SERIAL PRIMARY KEY,
+    billID INT REFERENCES transactions(id) NOT NULL,
+    productID INT REFERENCES products(id) NOT NULL,
+    productName VARCHAR(255) NOT NULL,
+    productPrice INT NOT NULL,
+    quantity INT NOT NULL CHECK (quantity > 0)
 );
