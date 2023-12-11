@@ -4,7 +4,6 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
-	"net/http"
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/lib/pq"
@@ -20,7 +19,7 @@ const (
 	DBName     = "dbenigma"
 )
 
-type Customer struct {
+type Customers struct {
 	Id          int    `json:"id"`
 	Name        string `json:"name"`
 	PhoneNumber string `json:"phonenumber"`
@@ -48,7 +47,7 @@ func main() {
 	router := gin.Default()
 
 	// Define your API routes and handlers here
-	router.POST("/customers", createCustomer)
+	router.POST("/customer", createCustomer)
 
 	// Run the server
 	port := 8080
@@ -60,14 +59,14 @@ func main() {
 
 // Add your API handlers here
 func createCustomer(c *gin.Context) {
-	var customer Customer
+	var customer Customers
 	if err := c.ShouldBindJSON(&customer); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(400, gin.H{"error": err.Error()})
 		return
 	}
 
 	// Prepare the SQL query
-	query := "INSERT INTO customers (id, name, phonenumber, address ) VALUES ($1, $2, $3, $4)"
+	query := "INSERT INTO customers (name, phonenumber, address) VALUES ($1, $2, $3) RETURNING id"
 	stmt, err := db.Prepare(query)
 	if err != nil {
 		c.JSON(500, gin.H{"error": "Failed to prepare the database query"})
@@ -75,12 +74,15 @@ func createCustomer(c *gin.Context) {
 	}
 	defer stmt.Close()
 
+	// Tambahkan log untuk mencetak query SQL yang akan dieksekusi
+	fmt.Println("SQL Query:", query)
+
 	// Execute the SQL query
-	err = stmt.QueryRow(customer.Name, customer.PhoneNumber, customer.Address).Scan(&customer.Id)
+	err = stmt.QueryRow(&customer.Name, &customer.PhoneNumber, &customer.Address).Scan(&customer.Id)
 	if err != nil {
 		c.JSON(500, gin.H{"error": "Failed to insert customer into the database"})
 		return
 	}
 
-	c.JSON(http.StatusCreated, gin.H{"message": "Customer created successfully", "data": customer})
+	c.JSON(201, gin.H{"message": "Customer created successfully", "data": customer})
 }

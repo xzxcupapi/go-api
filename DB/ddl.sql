@@ -3,7 +3,7 @@ CREATE TABLE customers (
   id SERIAL PRIMARY KEY,
   name VARCHAR(255) NOT NULL,
   phoneNumber VARCHAR(20) NOT NULL,
-  address TEXT NOT NULL
+  address VARCHAR(255) NOT NULL
 );
 
 -- Tabel Master Product
