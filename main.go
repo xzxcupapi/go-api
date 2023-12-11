@@ -114,8 +114,21 @@ func createCustomer(c *gin.Context) {
 		return
 	}
 
-	// Implement your logic to save the customer to the database
-	// ...
+	// Prepare the SQL query
+	query := "INSERT INTO customers (name, phone_number, address) VALUES ($1, $2, $3) RETURNING id"
+	stmt, err := db.Prepare(query)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to prepare the database query"})
+		return
+	}
+	defer stmt.Close()
+
+	// Execute the SQL query
+	err = stmt.QueryRow(customer.Name, customer.PhoneNumber, customer.Address).Scan(&customer.ID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to insert customer into the database"})
+		return
+	}
 
 	c.JSON(http.StatusCreated, gin.H{"message": "Customer created successfully", "data": customer})
 }
