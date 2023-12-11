@@ -1,25 +1,14 @@
--- Sample Customer Data
-INSERT INTO customer (name, phoneNumber, address) VALUES
-('John Doe', '1234567890', '123 Main St'),
-('Jane Doe', '9876543210', '456 Oak St');
+-- Insert Sample Data for Customers
+INSERT INTO Customer (NamaCust, NoHp) VALUES
+('Jessica', '0812654987');
 
--- Sample Product Data
-INSERT INTO product (name, price, unit) VALUES
-('Product A', 50, 'Unit'),
-('Product B', 30, 'Kg');
+-- Insert Sample Data for Services
+INSERT INTO Service (Pelayanan, Satuan, Harga) VALUES
+('Cuci + Setrika', 'KG', 7000),
+('Laundry Bedcover', 'Buah', 50000),
+('Laundry Boneka', 'Buah', 25000);
 
--- Sample Employee Data
-INSERT INTO employee (name, phoneNumber, address) VALUES
-('Alice Smith', '1112223333', '789 Elm St'),
-('Bob Johnson', '4445556666', '101 Pine St');
+-- Insert Sample Data for Transactions
+INSERT INTO LaundryTransaction (NoNota, TanggalMasuk, TanggalSelesai, DiterimaOleh, CustID) VALUES
+(1234, '2022-08-18', '2022-08-20', 'Mirna', 1);
 
--- Sample Transaction Data
-INSERT INTO transaction (billDate, entryDate, finishDate, employeeId, customerId, totalBill) VALUES
-('2023-01-01', '2023-01-01', '2023-01-02', 1, 1, 150),
-('2023-01-02', '2023-01-02', '2023-01-03', 2, 2, 90);
-
--- Sample Bill Details Data
-INSERT INTO billDetails (billId, productId, productPrice, qty) VALUES
-(1, 1, 50, 2),
-(1, 2, 30, 1),
-(2, 2, 30, 3);
