@@ -1,14 +1,24 @@
--- Data Contoh untuk Pelanggan
-INSERT INTO pelanggan (nama, nomorTelepon, alamat) VALUES
-('John Doe', '1234567890', '123 Jalan Utama'),
-('Jane Smith', '9876543210', '456 Jalan Oak');
+-- Sample Data Customer
+INSERT INTO customers (name, phoneNumber, address) VALUES
+('John Doe', '081234567890', 'Jl. Mawar No. 123'),
+('Jane Doe', '082345678901', 'Jl. Melati No. 456');
 
--- Data Contoh untuk Produk
-INSERT INTO produk (nama, harga, satuan) VALUES
-('Kaos', 16, 'Buah'),
-('Celana Jeans', 30, 'Buah');
+-- Sample Data Product
+INSERT INTO products (name, price, unit) VALUES
+('T-shirt', 150000, 'Buah'),
+('Jeans', 200000, 'Buah');
 
--- Data Contoh untuk Karyawan
-INSERT INTO karyawan (nama, nomorTelepon, alamat) VALUES
-('Alice Johnson', '1112223333', '789 Jalan Elm'),
-('Bob Davis', '4445556666', '101 Jalan Pine');
+-- Sample Data Employee
+INSERT INTO employees (name, phoneNumber, address) VALUES
+('Alice', '083456789012', 'Jl. Dahlia No. 789'),
+('Bob', '084567890123', 'Jl. Anggrek No. 012');
+
+-- Sample Data Transaction
+INSERT INTO transactions (billDate, entryDate, finishDate, employeeId, customerId) VALUES
+('2023-01-01', '2023-01-02', '2023-01-03', 1, 1),
+('2023-01-02', '2023-01-03', '2023-01-04', 2, 2);
+
+-- Sample Data Bill Details
+INSERT INTO billDetails (billId, productId, productPrice, qty) VALUES
+(1, 1, 150000, 2),
+(2, 2, 200000, 1);
