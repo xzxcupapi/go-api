@@ -10,8 +10,9 @@ CREATE TABLE customers (
 CREATE TABLE products (
   id SERIAL PRIMARY KEY,
   name VARCHAR(255) NOT NULL,
-  price INT NOT NULL,
+  quantity INT NOT NULL,
   unit VARCHAR(20) NOT NULL
+  price INT NOT NULL,
 );
 
 -- Tabel Master Employee

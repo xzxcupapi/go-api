@@ -41,6 +41,7 @@ func main() {
 	// Initialize Gin router
 	router := gin.Default()
 
+	//Customers Router
 	router.POST("/customers", func(c *gin.Context) {
 		handlers.CreateCustomer(c, db)
 	})
@@ -53,6 +54,8 @@ func main() {
 	router.DELETE("/customers/:id", func(c *gin.Context) {
 		handlers.DeleteCustomer(c, db)
 	})
+
+	//Products Router
 
 	// Run the server
 	port := 8080
