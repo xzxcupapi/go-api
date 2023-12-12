@@ -25,7 +25,7 @@ func CreateCustomer(c *gin.Context, db *sql.DB) {
 	}
 
 	// Prepare the SQL query
-	query := "INSERT INTO customers (name, phonenumber, address) VALUES ($1, $2, $3) RETURNING id"
+	query := "INSERT INTO customers (id, name, phonenumber, address) VALUES ($1, $2, $3, $4) RETURNING id"
 	stmt, err := db.Prepare(query)
 	if err != nil {
 		c.JSON(500, gin.H{"error": "Query Not Valid"})
@@ -37,7 +37,7 @@ func CreateCustomer(c *gin.Context, db *sql.DB) {
 	fmt.Println("SQL Query:", query)
 
 	// Execute the SQL query
-	err = stmt.QueryRow(&customer.Name, &customer.PhoneNumber, &customer.Address).Scan(&customer.Id)
+	err = stmt.QueryRow(&customer.Id, &customer.Name, &customer.PhoneNumber, &customer.Address).Scan(&customer.Id)
 	if err != nil {
 		c.JSON(500, gin.H{"error": "Failed to Insert Customer"})
 		return
