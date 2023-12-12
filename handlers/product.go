@@ -8,7 +8,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// Customers struct to represent a customer
 type Products struct {
 	Id       int    `json:"id"`
 	Name     string `json:"name"`
@@ -17,7 +16,7 @@ type Products struct {
 	Price    int    `json:"price"`
 }
 
-// CreateCustomer handles the creation of a new customer
+// CreateProducts
 func CreateProducts(c *gin.Context, db *sql.DB) {
 	var products Products
 	if err := c.ShouldBindJSON(&products); err != nil {
@@ -34,7 +33,7 @@ func CreateProducts(c *gin.Context, db *sql.DB) {
 	}
 	defer stmt.Close()
 
-	// Tambahkan log untuk mencetak query SQL yang akan dieksekusi
+	// Log
 	fmt.Println("SQL Query:", query)
 
 	// Execute the SQL query
@@ -47,7 +46,7 @@ func CreateProducts(c *gin.Context, db *sql.DB) {
 	c.JSON(201, gin.H{"data": products, "message": "Insert Products Successfully"})
 }
 
-// GetProducts retrieves a customer by ID
+// GetProducts by ID
 func GetProducts(c *gin.Context, db *sql.DB) {
 	productsID := c.Param("id")
 
@@ -55,10 +54,9 @@ func GetProducts(c *gin.Context, db *sql.DB) {
 	query := "SELECT id, name, quantity, unit, price FROM products WHERE id = $1"
 	row := db.QueryRow(query, productsID)
 
-	// Create a customer variable to store the result
 	var products Products
 
-	// Scan the row data into the customer variable
+	// Scan the row data
 	err := row.Scan(&products.Id, &products.Name, &products.Quantity, &products.Unit, &products.Price)
 	if err != nil {
 		c.JSON(500, gin.H{"error": "Products not Exist"})
@@ -68,18 +66,18 @@ func GetProducts(c *gin.Context, db *sql.DB) {
 	c.JSON(200, gin.H{"data": products})
 }
 
-// UpdateCustomer updates an existing customer by ID
+// UpdateCustomer by ID
 func UpdateProducts(c *gin.Context, db *sql.DB) {
 	var products Products
 	productsID := c.Param("id")
 
-	// Bind JSON input to customer struct
+	// Bind JSON input to products struct
 	if err := c.ShouldBindJSON(&products); err != nil {
 		c.JSON(400, gin.H{"error": err.Error()})
 		return
 	}
 
-	// Check if the productsID is a valid integer
+	// Validate id
 	if _, err := strconv.Atoi(productsID); err != nil {
 		c.JSON(400, gin.H{"error": "Invalid Product ID"})
 		return
@@ -112,12 +110,12 @@ func ProductsExists(db *sql.DB, productsID string) bool {
 	return err == nil && count > 0
 }
 
-// DeleteCustomer deletes a customer by ID
+// DeleteCustomer by ID
 func DeleteProducts(c *gin.Context, db *sql.DB) {
 	productsID := c.Param("id")
 
-	// Check if customer with the given ID exists
-	checkQuery := "SELECT COUNT(*) FROM customers WHERE id = $1"
+	// Check if product with the given ID exists
+	checkQuery := "SELECT COUNT(*) FROM products WHERE id = $1"
 	var count int
 	err := db.QueryRow(checkQuery, productsID).Scan(&count)
 	if err != nil {
