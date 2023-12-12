@@ -47,25 +47,25 @@ func CreateProducts(c *gin.Context, db *sql.DB) {
 	c.JSON(201, gin.H{"data": products, "message": "Insert Customer Successfully"})
 }
 
-// GetCustomer retrieves a customer by ID
+// GetProducts retrieves a customer by ID
 func GetProducts(c *gin.Context, db *sql.DB) {
-	customerID := c.Param("id")
+	productsID := c.Param("id")
 
 	// Prepare the SQL query
-	query := "SELECT id, name, phonenumber, address FROM customers WHERE id = $1"
-	row := db.QueryRow(query, customerID)
+	query := "SELECT id, name, quantity, unit, price FROM customers WHERE id = $1"
+	row := db.QueryRow(query, productsID)
 
 	// Create a customer variable to store the result
-	var customer Customers
+	var products Products
 
 	// Scan the row data into the customer variable
-	err := row.Scan(&customer.Id, &customer.Name, &customer.PhoneNumber, &customer.Address)
+	err := row.Scan(&products.Id, &products.Name, &products.Quantity, &products.Unit, &products.Price)
 	if err != nil {
 		c.JSON(500, gin.H{"error": "Customer not Exist"})
 		return
 	}
 
-	c.JSON(200, gin.H{"data": customer})
+	c.JSON(200, gin.H{"data": products})
 }
 
 // UpdateCustomer updates an existing customer by ID
