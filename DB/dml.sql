@@ -4,9 +4,9 @@ INSERT INTO customers (id, name, phoneNumber, address) VALUES
 ('2', 'Jane Doe', '082345678901', 'Jl. Melati No. 456');
 
 -- Sample Data Product
-    INSERT INTO products (name, quantity, unit, price) VALUES
-    ('Laundry Reguler', 1, 'KG', 15000),
-	('Laundry Express', 1, 'KG', 20000),;
+    INSERT INTO products (id, name, quantity, unit, price) VALUES
+    ('1', 'Laundry Reguler', 1, 'KG', 15000),
+	('2', 'Laundry Express', 1, 'KG', 20000),;
 
 -- Sample Data Employee
 INSERT INTO employees (id, name, phoneNumber, address) VALUES

@@ -69,6 +69,20 @@ func main() {
 		handlers.DeleteProducts(c, db)
 	})
 
+	//Employees Router
+	router.POST("/employees", func(c *gin.Context) {
+		handlers.CreateEmployees(c, db)
+	})
+	router.GET("/employees/:id", func(c *gin.Context) {
+		handlers.GetEmployees(c, db)
+	})
+	router.PUT("/employees/:id", func(c *gin.Context) {
+		handlers.UpdateEmployees(c, db)
+	})
+	router.DELETE("/employees/:id", func(c *gin.Context) {
+		handlers.DeleteEmployees(c, db)
+	})
+
 	// Run the server
 	port := 8080
 	log.Printf("Server is running on :%d...\n", port)
