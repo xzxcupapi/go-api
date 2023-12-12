@@ -8,7 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// Customers struct to represent a customer
+// Employees Struct
 type Employees struct {
 	Id          int    `json:"id"`
 	Name        string `json:"name"`

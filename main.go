@@ -83,6 +83,11 @@ func main() {
 		handlers.DeleteEmployees(c, db)
 	})
 
+	//Transaction Router
+	router.POST("/transactions", func(c *gin.Context) {
+		handlers.CreateTransaction(c, db)
+	})
+
 	// Run the server
 	port := 8080
 	log.Printf("Server is running on :%d...\n", port)
