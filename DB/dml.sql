@@ -14,9 +14,9 @@ INSERT INTO employees (id, name, phoneNumber, address) VALUES
 ('2', 'Bob', '084567890123', 'Jl. Anggrek No. 012');
 
 -- Sample Data Transaction
-INSERT INTO transactions (billDate, entryDate, finishDate, employeeId, customerId) VALUES
-('2023-01-01', '2023-01-02', '2023-01-03', 1, 1),
-('2023-01-02', '2023-01-03', '2023-01-04', 2, 2);
+INSERT INTO transactions (id, billDate, entryDate, finishDate, employeeId, customerId) VALUES
+('1', '2023-01-01', '2023-01-02', '2023-01-03', 1, 1),
+('2', '2023-01-02', '2023-01-03', '2023-01-04', 2, 2);
 
 -- Sample Data Bill Details
 INSERT INTO billDetails (billId, productId, productPrice, qty) VALUES
