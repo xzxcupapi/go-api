@@ -56,6 +56,18 @@ func main() {
 	})
 
 	//Products Router
+	router.POST("/products", func(c *gin.Context) {
+		handlers.CreateProducts(c, db)
+	})
+	router.GET("/products/:id", func(c *gin.Context) {
+		handlers.GetProducts(c, db)
+	})
+	router.PUT("/products/:id", func(c *gin.Context) {
+		handlers.UpdateProducts(c, db)
+	})
+	router.DELETE("/products/:id", func(c *gin.Context) {
+		handlers.DeleteProducts(c, db)
+	})
 
 	// Run the server
 	port := 8080

@@ -3,6 +3,7 @@ package handlers
 import (
 	"database/sql"
 	"fmt"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -18,17 +19,17 @@ type Products struct {
 
 // CreateCustomer handles the creation of a new customer
 func CreateProducts(c *gin.Context, db *sql.DB) {
-	var customer Customers
-	if err := c.ShouldBindJSON(&customer); err != nil {
+	var products Products
+	if err := c.ShouldBindJSON(&products); err != nil {
 		c.JSON(400, gin.H{"error": err.Error()})
 		return
 	}
 
 	// Prepare the SQL query
-	query := "INSERT INTO customers (name, phonenumber, address) VALUES ($1, $2, $3) RETURNING id"
+	query := "INSERT INTO products (name, quantity, unit, price) VALUES ($1, $2, $3, $4) RETURNING id"
 	stmt, err := db.Prepare(query)
 	if err != nil {
-		c.JSON(500, gin.H{"error": "Failed to prepare the database query"})
+		c.JSON(500, gin.H{"error": "Query Not Valid"})
 		return
 	}
 	defer stmt.Close()
@@ -37,13 +38,13 @@ func CreateProducts(c *gin.Context, db *sql.DB) {
 	fmt.Println("SQL Query:", query)
 
 	// Execute the SQL query
-	err = stmt.QueryRow(&customer.Name, &customer.PhoneNumber, &customer.Address).Scan(&customer.Id)
+	err = stmt.QueryRow(&products.Name, &products.Quantity, &products.Unit, &products.Price).Scan(&products.Id)
 	if err != nil {
-		c.JSON(500, gin.H{"error": "Failed to insert customer into the database"})
+		c.JSON(500, gin.H{"error": "Failed to Insert Customer"})
 		return
 	}
 
-	c.JSON(201, gin.H{"data": customer, "message": "Customer created successfully"})
+	c.JSON(201, gin.H{"data": products, "message": "Insert Customer Successfully"})
 }
 
 // GetCustomer retrieves a customer by ID
@@ -60,7 +61,7 @@ func GetProducts(c *gin.Context, db *sql.DB) {
 	// Scan the row data into the customer variable
 	err := row.Scan(&customer.Id, &customer.Name, &customer.PhoneNumber, &customer.Address)
 	if err != nil {
-		c.JSON(500, gin.H{"error": "Failed to retrieve customer from the database"})
+		c.JSON(500, gin.H{"error": "Customer not Exist"})
 		return
 	}
 
@@ -68,7 +69,7 @@ func GetProducts(c *gin.Context, db *sql.DB) {
 }
 
 // UpdateCustomer updates an existing customer by ID
-func UpdateProduct(c *gin.Context, db *sql.DB) {
+func UpdateProducts(c *gin.Context, db *sql.DB) {
 	var customer Customers
 	customerID := c.Param("id")
 
@@ -78,11 +79,23 @@ func UpdateProduct(c *gin.Context, db *sql.DB) {
 		return
 	}
 
+	// Check if the customerID is a valid integer
+	if _, err := strconv.Atoi(customerID); err != nil {
+		c.JSON(400, gin.H{"error": "Invalid customer ID"})
+		return
+	}
+
+	// Check if the customer with the given ID exists
+	if !customerExists(db, customerID) {
+		c.JSON(404, gin.H{"error": "Customer Not Exist"})
+		return
+	}
+
 	// Prepare the SQL query
 	query := "UPDATE customers SET name=$1, phonenumber=$2, address=$3 WHERE id=$4"
 	stmt, err := db.Prepare(query)
 	if err != nil {
-		c.JSON(500, gin.H{"error": "Failed to prepare the database query"})
+		c.JSON(500, gin.H{"error": "Query not valid"})
 		return
 	}
 	defer stmt.Close()
@@ -90,11 +103,19 @@ func UpdateProduct(c *gin.Context, db *sql.DB) {
 	// Execute the SQL query
 	_, err = stmt.Exec(customer.Name, customer.PhoneNumber, customer.Address, customerID)
 	if err != nil {
-		c.JSON(500, gin.H{"error": "Failed to update customer in the database"})
+		c.JSON(500, gin.H{"error": "Failed to update customer"})
 		return
 	}
 
 	c.JSON(200, gin.H{"message": "Customer updated successfully"})
+}
+
+// Function to check if a customer with the given ID exists
+func ProductsExists(db *sql.DB, customerID string) bool {
+	var count int
+	query := "SELECT COUNT(*) FROM customers WHERE id = $1"
+	err := db.QueryRow(query, customerID).Scan(&count)
+	return err == nil && count > 0
 }
 
 // DeleteCustomer deletes a customer by ID
@@ -106,12 +127,12 @@ func DeleteProducts(c *gin.Context, db *sql.DB) {
 	var count int
 	err := db.QueryRow(checkQuery, customerID).Scan(&count)
 	if err != nil {
-		c.JSON(500, gin.H{"error": "Failed to check customer existence"})
+		c.JSON(500, gin.H{"error": "Query Not Valid"})
 		return
 	}
 
 	if count == 0 {
-		c.JSON(404, gin.H{"error": "Customer not found"})
+		c.JSON(404, gin.H{"error": "Customer not Found"})
 		return
 	}
 
@@ -119,7 +140,7 @@ func DeleteProducts(c *gin.Context, db *sql.DB) {
 	query := "DELETE FROM customers WHERE id=$1"
 	stmt, err := db.Prepare(query)
 	if err != nil {
-		c.JSON(500, gin.H{"error": "Failed to prepare the database query"})
+		c.JSON(500, gin.H{"error": "Customer Not Exist"})
 		return
 	}
 	defer stmt.Close()
@@ -128,9 +149,9 @@ func DeleteProducts(c *gin.Context, db *sql.DB) {
 	_, err = stmt.Exec(customerID)
 	if err != nil {
 		fmt.Println("Error executing delete query:", err)
-		c.JSON(500, gin.H{"error": "Failed to delete customer from the database"})
+		c.JSON(500, gin.H{"error": "Failed to Delete Customer"})
 		return
 	}
 
-	c.JSON(200, gin.H{"message": "Customer deleted successfully"})
+	c.JSON(200, gin.H{"message": "Customer Deleted Successfully"})
 }
