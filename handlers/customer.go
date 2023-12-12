@@ -1,3 +1,4 @@
+// handlers/customer.go
 package handlers
 
 import (
@@ -100,6 +101,20 @@ func UpdateCustomer(c *gin.Context, db *sql.DB) {
 func DeleteCustomer(c *gin.Context, db *sql.DB) {
 	customerID := c.Param("id")
 
+	// Check if customer with the given ID exists
+	checkQuery := "SELECT COUNT(*) FROM customers WHERE id = $1"
+	var count int
+	err := db.QueryRow(checkQuery, customerID).Scan(&count)
+	if err != nil {
+		c.JSON(500, gin.H{"error": "Failed to check customer existence"})
+		return
+	}
+
+	if count == 0 {
+		c.JSON(404, gin.H{"error": "Customer not found"})
+		return
+	}
+
 	// Prepare the SQL query
 	query := "DELETE FROM customers WHERE id=$1"
 	stmt, err := db.Prepare(query)
@@ -112,6 +127,7 @@ func DeleteCustomer(c *gin.Context, db *sql.DB) {
 	// Execute the SQL query
 	_, err = stmt.Exec(customerID)
 	if err != nil {
+		fmt.Println("Error executing delete query:", err)
 		c.JSON(500, gin.H{"error": "Failed to delete customer from the database"})
 		return
 	}
