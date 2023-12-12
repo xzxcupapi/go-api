@@ -33,7 +33,7 @@ func CreateCustomer(c *gin.Context, db *sql.DB) {
 	}
 	defer stmt.Close()
 
-	// Tambahkan log untuk mencetak query SQL yang akan dieksekusi
+	// Log
 	fmt.Println("SQL Query:", query)
 
 	// Execute the SQL query
@@ -46,7 +46,7 @@ func CreateCustomer(c *gin.Context, db *sql.DB) {
 	c.JSON(201, gin.H{"data": customer, "message": "Insert Customer Successfully"})
 }
 
-// GetCustomer retrieves a customer by ID
+// GetCustomer by ID
 func GetCustomer(c *gin.Context, db *sql.DB) {
 	customerID := c.Param("id")
 
@@ -54,10 +54,9 @@ func GetCustomer(c *gin.Context, db *sql.DB) {
 	query := "SELECT id, name, phonenumber, address FROM customers WHERE id = $1"
 	row := db.QueryRow(query, customerID)
 
-	// Create a customer variable to store the result
 	var customer Customers
 
-	// Scan the row data into the customer variable
+	// Scan the row data
 	err := row.Scan(&customer.Id, &customer.Name, &customer.PhoneNumber, &customer.Address)
 	if err != nil {
 		c.JSON(500, gin.H{"error": "Customer not Exist"})
@@ -67,7 +66,7 @@ func GetCustomer(c *gin.Context, db *sql.DB) {
 	c.JSON(200, gin.H{"data": customer})
 }
 
-// UpdateCustomer updates an existing customer by ID
+// UpdateCustomer by ID
 func UpdateCustomer(c *gin.Context, db *sql.DB) {
 	var customer Customers
 	customerID := c.Param("id")
@@ -78,13 +77,13 @@ func UpdateCustomer(c *gin.Context, db *sql.DB) {
 		return
 	}
 
-	// Check if the customerID is a valid integer
+	// Validate id
 	if _, err := strconv.Atoi(customerID); err != nil {
 		c.JSON(400, gin.H{"error": "Invalid customer ID"})
 		return
 	}
 
-	// Check if the customer with the given ID exists
+	// Validate id no exist
 	if !customerExists(db, customerID) {
 		c.JSON(404, gin.H{"error": "Customer Not Exist"})
 		return
@@ -109,7 +108,7 @@ func UpdateCustomer(c *gin.Context, db *sql.DB) {
 	c.JSON(200, gin.H{"message": "Customer updated successfully"})
 }
 
-// Function to check if a customer with the given ID exists
+// Function ID exists
 func customerExists(db *sql.DB, customerID string) bool {
 	var count int
 	query := "SELECT COUNT(*) FROM customers WHERE id = $1"
@@ -117,11 +116,11 @@ func customerExists(db *sql.DB, customerID string) bool {
 	return err == nil && count > 0
 }
 
-// DeleteCustomer deletes a customer by ID
+// DeleteCustomer by ID
 func DeleteCustomer(c *gin.Context, db *sql.DB) {
 	customerID := c.Param("id")
 
-	// Check if customer with the given ID exists
+	// Validate Id
 	checkQuery := "SELECT COUNT(*) FROM customers WHERE id = $1"
 	var count int
 	err := db.QueryRow(checkQuery, customerID).Scan(&count)
