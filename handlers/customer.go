@@ -43,7 +43,7 @@ func CreateCustomer(c *gin.Context, db *sql.DB) {
 		return
 	}
 
-	c.JSON(201, gin.H{"message": "Customer created successfully", "data": customer})
+	c.JSON(201, gin.H{"data": customer, "message": "Customer created successfully"})
 }
 
 // GetCustomer retrieves a customer by ID
