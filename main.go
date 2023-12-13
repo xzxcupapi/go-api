@@ -88,6 +88,10 @@ func main() {
 		handlers.CreateTransaction(c, db)
 	})
 
+	router.GET("/transactions/:id", func(c *gin.Context) {
+		handlers.GetTransaction(c, db)
+	})
+
 	// Run the server
 	port := 8080
 	log.Printf("Server is running on :%d...\n", port)

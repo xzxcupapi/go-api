@@ -48,3 +48,23 @@ func CreateTransaction(c *gin.Context, db *sql.DB) {
 
 	c.JSON(201, gin.H{"data": transaction, "message": "Insert Transaction Successfully"})
 }
+
+// GetTransaction by ID
+func GetTransaction(c *gin.Context, db *sql.DB) {
+	transactionID := c.Param("id")
+
+	//Prepare Query SQL
+	query := "SELECT id, billdate, entrydate, finishdate, employeeid, customerid FROM transactions WHERE id = $1"
+	row := db.QueryRow(query, transactionID)
+
+	var transaction Transaction
+
+	//Scan the row data
+	err := row.Scan(&transaction.Id, &transaction.BillDate, &transaction.EntryDate, &transaction.FinishDate, &transaction.EmployeeId, &transaction.CustomerId)
+	if err != nil {
+		c.JSON(500, gin.H{"error": "Transaction not Exist"})
+		return
+	}
+
+	c.JSON(200, gin.H{"data": transaction})
+}
