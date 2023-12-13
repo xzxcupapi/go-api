@@ -89,3 +89,41 @@ go run migrate.go
 #### 4.1.4 Delete Customer
 
 - **Endpoint: `DELETE /customers/{id}`**
+
+### 4.2 Products
+
+#### 4.1.1 Add New Products
+
+- **Endpoint: `POST /products`**
+- **Sample Request Body:**
+
+```json
+{
+  "name": "Laundry Reguler",
+  "quantity": 1,
+  "unit": "KG",
+  "price": 15000
+}
+```
+
+#### 4.1.2 Get Product Information
+
+- **Endpoint : `GET /products/{id}`**
+
+#### 4.1.3 Update Product Data
+
+- **Endpoint : `PUT /products/{id}`**
+- **Sample Body Request**
+
+```json
+{
+  "name": "New Product",
+  "quantity": 2,
+  "unit": "New Unit",
+  "price": 28000
+}
+```
+
+#### 4.1.4 Delete Product
+
+- **Endpoint : `DELETE /products/{id}`**
