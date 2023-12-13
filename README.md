@@ -1,6 +1,6 @@
-# API Enigma Laundry Documentation
+# Go API
 
-API Enigma Laundry is a service for managing customer, product, employee, and transaction data for laundry purposes. This documentation provides details on how to use the API, including endpoints for adding, updating, and deleting customer, product, employee, and transaction data.
+Go API is a service for managing customer, product, employee, and transaction data for laundry purposes. This documentation provides details on how to use the API, including endpoints for adding, updating, and deleting customer, product, employee, and transaction data.
 
 ## Table of Contents
 
@@ -14,7 +14,6 @@ API Enigma Laundry is a service for managing customer, product, employee, and tr
    - [Products](#42-products)
    - [Employees](#43-employees)
    - [Transactions](#44-transactions)
-5. [Sample Requests](#5-sample-requests)
 
 ## 1. Installation
 
