@@ -87,7 +87,6 @@ func main() {
 	router.POST("/transactions", func(c *gin.Context) {
 		handlers.CreateTransaction(c, db)
 	})
-
 	router.GET("/transactions/:id", func(c *gin.Context) {
 		handlers.GetTransaction(c, db)
 	})
